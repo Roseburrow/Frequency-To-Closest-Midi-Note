@@ -1,6 +1,7 @@
 //Calculates the closest midi note to a given frequency.
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 int main()
@@ -12,6 +13,8 @@ int main()
     double output_frequency; //the unrounded frequency of the closest midinote.
     double newnotefrequency; //the frequency of the closest midi note. 
     int midinote; //the midi note closest to the input frequency.
+    char message[256];
+    char* input;
 
     //CALCULATE REQUIRED VALUES.
 
@@ -25,9 +28,21 @@ int main()
     c0 = c5 * pow(0.5, 5.0);
 
     printf("Please enter a frequency: "); //Get frequency.
-    scanf("%lf", &input_frequency);
+    input = fgets(message, 256, stdin);
+    
+    if (input == NULL)
+    {
+	printf("Error reading input!\n");
+	return 1;
+    }
+    if (message [0] == '\0' || message[0] == '\n')
+    {
+	printf("Please enter a frequency!\n");
+	return 1;
+    }
 
     //Finds a value to base semitone_ratio.
+    input_frequency = atof(input);
     output_frequency = log(input_frequency / c0) / log(semitone_ratio);
 
     //Round output to the nearest whole no. 
