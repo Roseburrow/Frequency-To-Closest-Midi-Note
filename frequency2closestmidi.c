@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int main()
+int main(int argc, char* argv[])
 {
     double semitone_ratio;
     double c0; //the frequency of midi note 0.
@@ -13,9 +13,13 @@ int main()
     double output_frequency; //the unrounded frequency of the closest midinote.
     double newnotefrequency; //the frequency of the closest midi note. 
     int midinote; //the midi note closest to the input frequency.
-    char message[256];
-    char* input;
 
+    if (argc != 2)
+    {
+	printf("Invalid Use of Program!\nUse: %s Frequency\n", argv[0]);
+	return 1;
+    }
+    
     //CALCULATE REQUIRED VALUES.
 
     //To raise something a semitone do semitone_ration^semitone rise.
@@ -24,25 +28,11 @@ int main()
     //Find middle C, 3 semitones below low A (220Hz).
     c5 = 220.0 * pow(semitone_ratio, 3.0);
 
-    //Use c5 to find midi note 0, 5 octaves below c5. 0.5 is 1 octave fall.
+    //Use c5 to find midi note 0, 5 octaves below c5. 0.5 is 1 octave fall
     c0 = c5 * pow(0.5, 5.0);
-
-    printf("Please enter a frequency: "); //Get frequency.
-    input = fgets(message, 256, stdin);
     
-    if (input == NULL)
-    {
-	printf("Error reading input!\n");
-	return 1;
-    }
-    if (message [0] == '\0' || message[0] == '\n')
-    {
-	printf("Please enter a frequency!\n");
-	return 1;
-    }
-
+    input_frequency = atof(argv[1]);
     //Finds a value to base semitone_ratio.
-    input_frequency = atof(input);
     output_frequency = log(input_frequency / c0) / log(semitone_ratio);
 
     //Round output to the nearest whole no. 
